@@ -1,0 +1,48 @@
+<body ngClass="app">
+  <header ngClass="app-header">
+    <h1 ngClass="app-title">{{appTitle | titlecase }}</h1>
+    <p ngClass="app-description">{{appDescription | titlecase }}</p>
+  </header>
+
+  <main ngClass="app-main">
+    <form action="" ngClass="task-form" (submit)="createAndDisplayTask()">
+      <textarea [(ngModel)]="taskInputValue" name="taskInputValue" [placeholder]="taskInputPlaceholder" ngClass="task-input">
+      </textarea>
+      <div ngClass="other-inputs">
+        <!-- HTML input of type date MUST be stored in a variable/property of type Date as well. -->
+        <div><input type="date" [(ngModel)]="dueDateInputValue" name="dueDateInputValue" ngClass="due-date-input"></div>
+        <div ngClass="tags-input-and-button">
+          <input type="text" [(ngModel)]="tagsInputValue" name="tagsInputValue" ngClass="tags-input" [placeholder]="tagsInputPlaceholder | titlecase ">
+          <button ngClass="add-task-button" type="submit">{{addTaskButtonText | titlecase }}</button>
+        </div>
+      </div>
+    </form>
+
+    <!-- tr = table row, th = table header, td = table data -->
+    <table ngClass="task-table">
+      <!-- Header Row -->
+      <tr>
+        <th>{{indexColumn | titlecase}}</th>
+        <th>{{taskNameColumn | titlecase}}</th>
+        <th>{{dueDateColumn | titlecase}}</th>
+        <th>{{tagsColumn | titlecase}}</th>
+      </tr>
+      <!-- Data Row 1 -->
+       <!-- Call (access) the signal variable. -->
+      @for (fetchedTask of fetchedTasks(); track fetchedTask.taskName) {
+      <tr>
+        <td>{{fetchedTask.id}}</td>
+        <td><input type="checkbox" [checked]="updateSpecifiedTask(fetchedTask.id)" [ngStyle]="{'margin-right': '20px'}">{{fetchedTask.taskName}}</td>
+        <td><button (click)="deleteSpecifiedTask(fetchedTask.id)" [ngStyle]="{'margin-right': '20px', 'border': 'none', 'color': 'red'}">{{deleteTaskButtonText}}</button> {{fetchedTask.dueDate}}</td>
+        @for (tag of fetchedTask.tags; track $index) {
+        <td [ngStyle]="tagBackgroundColorLogic(tag)" ngClass="tag">{{tag}}</td>
+        }
+      </tr>
+      }
+    </table>
+
+
+
+  </main>
+
+</body>
